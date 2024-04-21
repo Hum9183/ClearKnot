@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
-from PySide2.QtCore import QStringListModel
-from PySide2.QtWidgets import QMainWindow, QMenu, QAction, QListView
 
 from maya.app.general import mayaMixin
+try:
+    from PySide6.QtCore import QStringListModel
+    from PySide6.QtGui import QAction
+    from PySide6.QtWidgets import QMainWindow, QMenu, QListView
+except ImportError:
+    from PySide2.QtCore import QStringListModel
+    from PySide2.QtWidgets import QAction, QMainWindow, QMenu, QListView
 
 from .add import add_package_from_git_url
 from .main_commands import restart_command

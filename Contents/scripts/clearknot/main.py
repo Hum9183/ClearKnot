@@ -4,9 +4,12 @@ from textwrap import dedent
 
 from maya import cmds
 from maya import OpenMayaUI as omui
-
-from PySide2.QtWidgets import QApplication, QWidget
-import shiboken2
+try:
+    from PySide6.QtWidgets import QApplication, QWidget
+    from shiboken6 import wrapInstance
+except ImportError:
+    from PySide2.QtWidgets import QApplication, QWidget
+    from shiboken2 import wrapInstance
 
 from .main_commands import restore_command
 from .window import ClearKnotMainWindow
@@ -33,7 +36,7 @@ def startup() -> None:
     ptr = omui.MQtUtil.findControl(ClearKnotMainWindow.name)
 
     if ptr:
-        win = shiboken2.wrapInstance(int(ptr), QWidget)
+        win = wrapInstance(int(ptr), QWidget)
         if win.isVisible():
             win.show()  # NOTE: show()することで再フォーカスする
         else:
