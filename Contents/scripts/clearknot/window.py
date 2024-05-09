@@ -9,7 +9,7 @@ except ImportError:
     from PySide2.QtCore import QStringListModel
     from PySide2.QtWidgets import QAction, QMainWindow, QMenu, QListView
 
-from .add import add_package_from_git_url
+from . import package_adder
 from .main_commands import restart_command
 from .const import Const
 
@@ -44,7 +44,7 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         file_menu.addAction(exit_action)
 
         add_form_git_action = QAction('Add package from git URL', self)
-        add_form_git_action.triggered.connect(lambda *arg: add_package_from_git_url(self.string_list_model, self.list_view))
+        add_form_git_action.triggered.connect(lambda *arg: package_adder.add_from_git_url(self.string_list_model, self.list_view))
         add_menu = menu_bar.addMenu("Add")
         add_menu.addAction(add_form_git_action)
 
@@ -52,6 +52,12 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         restart_action.triggered.connect(lambda *arg: restart_command.clear_knot_restart_command())
         dev_menu = menu_bar.addMenu("Dev")
         dev_menu.addAction(restart_action)
+
+        version_action = QAction('version', self)
+        version_action.triggered.connect(lambda *arg: print(Const.TOOL_VERSION))
+        help_menu = menu_bar.addMenu("help")
+        help_menu.addAction(version_action)
+
 
     def init_list(self):
         self.string_list_model = QStringListModel(["Lion", "Monkey", "Tiger", "Cat"])
