@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 from maya.app.general import mayaMixin
+
 try:
     from PySide6.QtCore import QStringListModel
     from PySide6.QtGui import QAction
@@ -9,7 +9,8 @@ except ImportError:
     from PySide2.QtCore import QStringListModel
     from PySide2.QtWidgets import QAction, QMainWindow, QMenu, QListView
 
-from . import package_adder
+from .package_adder import add_from_git_url
+from .pip_installer import install
 from .main_commands import restart_command
 from .const import Const
 
@@ -44,9 +45,12 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         file_menu.addAction(exit_action)
 
         add_form_git_action = QAction('Add package from git URL', self)
-        add_form_git_action.triggered.connect(lambda *arg: package_adder.add_from_git_url(self.string_list_model, self.list_view))
+        add_form_git_action.triggered.connect(lambda *arg: add_from_git_url(self.string_list_model, self.list_view))
+        add_form_pip_action = QAction('Add package from pip(PyPI)', self)
+        add_form_pip_action.triggered.connect(lambda *arg: install())
         add_menu = menu_bar.addMenu("Add")
         add_menu.addAction(add_form_git_action)
+        add_menu.addAction(add_form_pip_action)
 
         restart_action = QAction('Restart', self)
         restart_action.triggered.connect(lambda *arg: restart_command.clear_knot_restart_command())
