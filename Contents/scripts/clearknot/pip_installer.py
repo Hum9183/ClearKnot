@@ -52,3 +52,4 @@ def install():
     # 直接Explorerで操作せずにGUIで操作する前提なら、これでも良いと思う
 
     # TODO: ユーザスペースにgitリポジトリを入れる処理を書く
+    # FEATURE:ApplicationPluginsにいれるようなツールの挙動は実現できないため、なんとかできないか考える
