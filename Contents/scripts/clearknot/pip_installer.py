@@ -53,4 +53,5 @@ def install():
 
     # TODO: ユーザスペースにgitリポジトリを入れる処理を書く
     # FEATURE:ApplicationPluginsにいれるようなツールの挙動は実現できないため、なんとかできないか考える
-    # =>runtimeでuserSetup.pyを読むパスを追加するようにする(userSetup.pyが存在するツールの数分だけ)
+    # ApplicationPluginsは規定の位置に入れたままにしておき、インタプリタの参照するパスにApplicationPluginsを指定できないか調べる
+    # (性格にはApplicationPluginsからの相対パス。これができるようになればそもそもPyPI以外のpackageはユーザスペースに置く必要がなくなる)
