@@ -1,2 +1,2 @@
 # ClearKnot
-Python package manager in Maya
+Python package manager for Maya
