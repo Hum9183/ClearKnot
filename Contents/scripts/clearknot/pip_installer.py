@@ -55,3 +55,4 @@ def install():
     # FEATURE:ApplicationPluginsにいれるようなツールの挙動は実現できないため、なんとかできないか考える
     # ApplicationPluginsは規定の位置に入れたままにしておき、インタプリタの参照するパスにApplicationPluginsを指定できないか調べる
     # (性格にはApplicationPluginsからの相対パス。これができるようになればそもそもPyPI以外のpackageはユーザスペースに置く必要がなくなる)
+    # hoge.pthファイルに絶対/相対パスを書いてsite-packages下においておけば参照できるようになる！！！
