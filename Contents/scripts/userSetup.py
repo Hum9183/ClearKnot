@@ -3,9 +3,8 @@ from textwrap import dedent
 
 from maya import cmds
 
-# TODO: ClearKnot自身の依存パッケージは事前にクローンする処理を行う
-
 def __register_organizerbox_startup():
+    # TODO: Py2の場合は「Not Supported」みたいなmenuitemを追加するようにする
     cmd = dedent(
         """
         import clearknot.startup
