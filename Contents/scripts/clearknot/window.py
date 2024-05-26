@@ -10,9 +10,11 @@ except ImportError:
     from PySide2.QtWidgets import QAction, QMainWindow, QMenu, QListView
 
 from .package_adder import add_from_git_url
-from .pip_installer import install
+from . import pip_installer
 from .main_commands import restart_command
 from .const import Const
+
+from .utils import pip_util
 
 
 class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
@@ -47,10 +49,16 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         add_form_git_action = QAction('Add package from git URL', self)
         add_form_git_action.triggered.connect(lambda *arg: add_from_git_url(self.string_list_model, self.list_view))
         add_form_pip_action = QAction('Add package from pip(PyPI)', self)
-        add_form_pip_action.triggered.connect(lambda *arg: install())
+        add_form_pip_action.triggered.connect(lambda *arg: pip_installer.add(self.string_list_model))
+        remove_form_pip_action = QAction('Remove package from pip(PyPI)', self)
+        remove_form_pip_action.triggered.connect(lambda *arg: pip_installer.remove(self.string_list_model))
+        test_action = QAction('show installed', self)
+        test_action.triggered.connect(lambda *arg: pip_util.show_installed())
         add_menu = menu_bar.addMenu("Add")
         add_menu.addAction(add_form_git_action)
         add_menu.addAction(add_form_pip_action)
+        add_menu.addAction(remove_form_pip_action)
+        add_menu.addAction(test_action)
 
         restart_action = QAction('Restart', self)
         restart_action.triggered.connect(lambda *arg: restart_command.clear_knot_restart_command())
@@ -64,7 +72,8 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
 
 
     def init_list(self):
-        self.string_list_model = QStringListModel(["Lion", "Monkey", "Tiger", "Cat"])
+        self.string_list_model = QStringListModel()
+        pip_util.set_installed(self.string_list_model)
         self.list_view = QListView()
         self.list_view.setModel(self.string_list_model)
         self.setCentralWidget(self.list_view)
@@ -74,6 +83,9 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         self.init_menu()
         self.init_list()
 
+
+    def test_debug(self):
+        pip_util.freeze()
 
 # TODO:
 # window closeのコールバックで
