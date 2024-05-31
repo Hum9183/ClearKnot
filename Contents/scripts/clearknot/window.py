@@ -61,7 +61,7 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         add_menu.addAction(test_action)
 
         restart_action = QAction('Restart', self)
-        restart_action.triggered.connect(lambda *arg: restart_command.clear_knot_restart_command())
+        restart_action.triggered.connect(lambda *arg: restart_command.clearknot_restart_command())
         dev_menu = menu_bar.addMenu("Dev")
         dev_menu.addAction(restart_action)
 

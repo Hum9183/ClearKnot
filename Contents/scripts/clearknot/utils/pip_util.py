@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from typing import Dict
+from typing import Dict, List
 
 try:
     from PySide6.QtCore import QStringListModel
 except ImportError:
     from PySide2.QtCore import QStringListModel
 
+from maya import cmds
 
 from ..const import Const
 from .list_util import try_get_item
@@ -21,12 +22,14 @@ def freeze() -> Dict[str, str]:
         del split_newline[-1] # 最後の改行は削除
 
         parsed_dict = {}
-        for xx in split_newline:
-            split_equal = xx.split('==')
+        for package in split_newline:
+            split_equal = package.split('==')
             package_name, success0 = try_get_item(split_equal, 0)
-            version, success1 = try_get_item(split_equal, 1)
+            package_version, success1 = try_get_item(split_equal, 1)
             if success0 and success1:
-                parsed_dict[package_name] = version
+                parsed_dict[package_name] = package_version
+            else:
+                cmds.warning(f'{package}を辞書のitemに変換できませんでした')
         return parsed_dict
 
     freeze_cmd = [Const.mayapy_exe_path, m, pip, 'freeze']
@@ -36,12 +39,12 @@ def freeze() -> Dict[str, str]:
 
 
 def set_installed(string_list_model :QStringListModel):
-    installed = freeze()
-    combined_installed = [f'{k} - {v}' for k, v in installed.items()]
+    installed_packages: Dict[str, str] = freeze()
+    combined_installed: List[str] = [f'{k} - {v}' for k, v in installed_packages.items()]
     string_list_model.setStringList(combined_installed)
 
 
 def show_installed():
-    installed_packages = freeze()
+    installed_packages: Dict[str, str] = freeze()
     for package in installed_packages.items():
         print(package)
