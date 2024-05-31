@@ -15,17 +15,17 @@ class ReadonlyMeta(type):
 
 
 def get_waring_str(file_name, func_name, attr_name, attr_value):
-    return u'再代入例外' + dedent(
+    return u'Rebind Error' + dedent(
         u"""
-            # 再代入例外: ReadonlyMeta使用しているクラスはアトリビュートに再代入できません。
+            # Rebind Error: Classes inheriting from ReadonlyMeta cannot rebind attribute.
             # Info:
-            #   ファイル...'{}' 
-            #   関数...'{}' 
-            #   アトリビュート...'{}' 
-            #   再代入しようとした値...'{}'
-            //////////////////// Rebind Error ///////////////////////
-            // Classes using ReadonlyMeta cannot rebind attribute. //
-            /////////////////////////////////////////////////////////
+            #   File...'{}' 
+            #   Function...'{}' 
+            #   Attribute...'{}' 
+            #   Value...'{}'
+            ////////////////////////// Rebind Error ///////////////////////////
+            // Classes inheriting from ReadonlyMeta cannot rebind attribute. //
+            ///////////////////////////////////////////////////////////////////
         """.format(file_name, func_name, attr_name, attr_value))
 
 
