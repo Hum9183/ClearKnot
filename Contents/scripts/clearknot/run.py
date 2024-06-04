@@ -11,7 +11,7 @@ except ImportError:
     from PySide2.QtWidgets import QApplication, QWidget
     from shiboken2 import wrapInstance
 
-from .main_commands import restore_command
+from .run_scripts import restore as restore_module
 from .window import ClearKnotMainWindow
 
 
@@ -21,7 +21,7 @@ def restart() -> None:
         cmds.deleteUI(ClearKnotMainWindow.workspace_control, control=True)
 
     win = __create_window()
-    cmd = dedent(inspect.getsource(restore_command))
+    cmd = dedent(inspect.getsource(restore_module))
     win.show(dockable=True, uiScript=cmd)
 
 
@@ -43,7 +43,7 @@ def startup() -> None:
             win.setVisible(True)
     else:
         win = __create_window()
-        cmd = dedent(inspect.getsource(restore_command))
+        cmd = dedent(inspect.getsource(restore_module))
 
         # 空のWindowが生成されてしまった場合
         if cmds.workspaceControl(ClearKnotMainWindow.workspace_control, q=True, exists=True):

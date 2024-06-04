@@ -11,7 +11,7 @@ except ImportError:
 
 from .package_adder import add_from_git_url
 from . import pip_installer
-from .main_commands import restart_command
+from .run_scripts.restart import restart_clearknot
 from .const import Const
 
 from .utils import pip_util
@@ -61,7 +61,7 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         add_menu.addAction(test_action)
 
         restart_action = QAction('Restart', self)
-        restart_action.triggered.connect(lambda *arg: restart_command.clearknot_restart_command())
+        restart_action.triggered.connect(lambda *arg: restart_clearknot())
         dev_menu = menu_bar.addMenu("Dev")
         dev_menu.addAction(restart_action)
 
