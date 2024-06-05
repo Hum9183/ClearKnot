@@ -6,7 +6,7 @@ def start_clearknot():
     # startではreloadは行わない。
     # reloadしたい場合は「Dev」=>「Restart」を実行する
     from clearknot import run
-    run.startup()
+    run.start()
 
 
 if __name__ == '__main__':

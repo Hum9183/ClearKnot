@@ -32,7 +32,7 @@ def restore() -> None:
     omui.MQtUtil.addWidgetToMayaLayout(int(ptr), int(restored_control))
 
 
-def startup() -> None:
+def start() -> None:
     ptr = omui.MQtUtil.findControl(ClearKnotMainWindow.name)
 
     if ptr:
