@@ -24,7 +24,7 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
     workspace_control = f'{name}WorkspaceControl'
 
     def __init__(self, parent=None, *args, **kwargs):
-        super(ClearKnotMainWindow, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         self.list_view = None
         self.string_list_model = None
 
