@@ -13,10 +13,11 @@ except ImportError:
     from PySide2.QtWidgets import QAction, QMainWindow, QMenu, QListView
 
 from .const import Const
-from .package_adder import add_from_git_url
 from .run_scripts.restart import restart_clearknot
 from .run_scripts import restore
 from .utils import pip_util
+from . import application_plugins
+from . import package_adder
 from . import pip_installer
 
 
@@ -49,16 +50,19 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         file_menu.addMenu(open_menu)
         file_menu.addAction(exit_action)
 
-        add_form_git_action = QAction('Add package from git clone', self)
-        add_form_git_action.triggered.connect(lambda *arg: add_from_git_url(self.string_list_model, self.list_view))
-        add_form_pip_action = QAction('Add package from pip(PyPI or GitHub)', self)
+        add_application_plugins_action = QAction('Add Application Plugins from Git URL (clone)', self)
+        add_application_plugins_action.triggered.connect(lambda *arg: package_adder.add_from_git_url(self.string_list_model, True))
+        add_form_git_action = QAction('Add package from Git URL (clone)', self)
+        add_form_git_action.triggered.connect(lambda *arg: package_adder.add_from_git_url(self.string_list_model, False))
+        add_form_pip_action = QAction('Add package from PyPI or Git URL (pip)', self)
         add_form_pip_action.triggered.connect(lambda *arg: pip_installer.add(self.string_list_model))
-        remove_form_pip_action = QAction('Remove package from pip(PyPI or GitHub)', self)
+        remove_form_pip_action = QAction('Remove package from PyPI or Git URL (pip)', self)
         remove_form_pip_action.triggered.connect(lambda *arg: pip_installer.remove(self.string_list_model))
         test_action = QAction('show installed', self)
         test_action.triggered.connect(lambda *arg: pip_util.show_installed())
         add_menu = menu_bar.addMenu("Add")
         add_menu.addAction(add_form_git_action)
+        add_menu.addAction(add_application_plugins_action)
         add_menu.addAction(add_form_pip_action)
         add_menu.addAction(remove_form_pip_action)
         add_menu.addAction(test_action)
@@ -91,8 +95,3 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
     def show(self):
         restore_script = textwrap.dedent(inspect.getsource(restore))
         super().show(dockable=True, retain=False, uiScript=restore_script)
-
-# TODO:
-# window closeのコールバックで
-# cmds.deleteUI(ClearKnotMainWindow.name + 'WorkspaceControl', control=True)
-# を実行する

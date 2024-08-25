@@ -55,8 +55,8 @@ def add(string_list_model :QStringListModel) -> None:
     # Githubのリポジトリの場合
     if 'github' in input_text:
         input_text = f'git+{input_text}'
-
-    install_cmd = [Const.mayapy_exe_path, m, pip, 'install', user, input_text]
+    prefix = r'--prefix=D:\test'
+    install_cmd = [Const.mayapy_exe_path, m, pip, 'install', prefix, input_text]
     _, success = SubprocessWrapper.run(install_cmd)
     if success:
         print(f'{input_text}をインストールしました')
@@ -71,7 +71,6 @@ def add(string_list_model :QStringListModel) -> None:
     # mayapy.exeのシンタックスハイライトが効かなくなるため、両者ともユーザスペースに入れている
     # 直接Explorerで操作せずにGUIで操作する前提なら、これでも良いと思う
 
-    # TODO: pipでgithubリポジトリを入れる機能
     # TODO: clearknot.pthの自動生成処理&自動書き込み処理
     # TODO: venvを使用できるオプションをつける
 

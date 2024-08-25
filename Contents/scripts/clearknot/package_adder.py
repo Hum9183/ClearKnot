@@ -7,12 +7,12 @@ from typing import Optional
 try:
     from PySide6.QtCore import QStringListModel
     from PySide6.QtGui import QAction
-    from PySide6.QtWidgets import QMainWindow, QMenu, QListView
+    from PySide6.QtWidgets import QMainWindow, QMenu, QListView, QInputDialog
 except ImportError:
     from PySide2.QtCore import QStringListModel
-    from PySide2.QtWidgets import QMainWindow, QMenu, QListView, QAction
+    from PySide2.QtWidgets import QMainWindow, QMenu, QListView, QAction, QInputDialog
 
-from .utils import path
+from .utils import path, str_util
 from .utils import inview_message
 
 GIT = 'git'
@@ -21,14 +21,26 @@ CLEARKNOT_JSON_FILE_NAME = 'clearknot.json'
 DEPENDENCIES = 'dependencies'
 
 
-def add_from_git_url(string_list_model: QStringListModel, list_view: QListView):
-    url = 'https://github.com/Hum9183/SampleTool01.git'
-    desktop_dir = path.combine(os.path.expanduser('~/Document').split('/')[:-1])
-    repository_name = url.split('/')[-1].split('.')[0]
-    # TODO: OneDrive/ドキュメント/のところはちゃんとやる
-    repository_path = path.combine([desktop_dir, r'OneDrive/ドキュメント/maya/scripts', repository_name])
+def add_from_git_url(string_list_model: QStringListModel, is_application_plugins: bool):
+    input_text, success = QInputDialog.getText(
+        None,
+        'Input Dialog',
+        'Please enter the PyPI package name.'
+    )
+    if success is False:
+        return
+    if input_text == str_util.EMPTY:
+        return
 
-    print("desktop_dir::", desktop_dir)
+    url = input_text
+    repository_name = url.split('/')[-1].split('.')[0]
+    if is_application_plugins:
+        repository_path = path.combine(['C:\Program Files\Autodesk\ApplicationPlugins', repository_name])
+    else:
+        # TODO: OneDrive/ドキュメント/のところはちゃんとやる
+        desktop_dir = path.combine(os.path.expanduser('~/Document').split('/')[:-1])
+        repository_path = path.combine([desktop_dir, r'OneDrive/ドキュメント/maya/scripts', repository_name])
+
     print("repository_name::", repository_name)
     print("repository_path::", repository_path)
     __add(repository_path, repository_name, url, string_list_model)
@@ -44,7 +56,7 @@ def __add(repository_path: str, repository_name: str, url: str, string_list_mode
     else:
         for dependency in dependencies:
             print(dependency)
-            # TODO: packageの識別名・url・バージョン、をそれぞれどういう持たせるのが良いか考える
+            # TODO: pipでインストールする(ApplicationPluginsに依存している場合にどうするかは別途考える)
             # __add(dependency)
 
 
