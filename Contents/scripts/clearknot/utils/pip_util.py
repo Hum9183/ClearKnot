@@ -23,13 +23,20 @@ def freeze() -> Dict[str, str]:
 
         parsed_dict = {}
         for package in split_newline:
-            split_equal = package.split('==')
-            package_name, success0 = try_get_item(split_equal, 0)
-            package_version, success1 = try_get_item(split_equal, 1)
-            if success0 and success1:
-                parsed_dict[package_name] = package_version
+            if 'github' in package:
+                # githubからの場合
+                split_atmark = package.split('@')
+                package_name = split_atmark[0].strip()
+                parsed_dict[package_name] = "Unknown"   # NOTE: 仮
             else:
-                cmds.warning(f'{package}を辞書のitemに変換できませんでした')
+                # PyPIからの場合
+                split_equal = package.split('==')
+                package_name, success0 = try_get_item(split_equal, 0)
+                package_version, success1 = try_get_item(split_equal, 1)
+                if success0 and success1:
+                    parsed_dict[package_name] = package_version
+                else:
+                    cmds.warning(f'{package}を辞書のitemに変換できませんでした')
         return parsed_dict
 
     freeze_cmd = [Const.mayapy_exe_path, m, pip, 'freeze']

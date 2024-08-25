@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import inspect
+import textwrap
+
 from maya.app.general import mayaMixin
 
 try:
@@ -9,12 +12,12 @@ except ImportError:
     from PySide2.QtCore import QStringListModel
     from PySide2.QtWidgets import QAction, QMainWindow, QMenu, QListView
 
-from .package_adder import add_from_git_url
-from . import pip_installer
-from .run_scripts.restart import restart_clearknot
 from .const import Const
-
+from .package_adder import add_from_git_url
+from .run_scripts.restart import restart_clearknot
+from .run_scripts import restore
 from .utils import pip_util
+from . import pip_installer
 
 
 class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
@@ -70,7 +73,6 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         help_menu = menu_bar.addMenu("help")
         help_menu.addAction(version_action)
 
-
     def init_list(self):
         self.string_list_model = QStringListModel()
         pip_util.set_installed(self.string_list_model)
@@ -83,9 +85,12 @@ class ClearKnotMainWindow(mayaMixin.MayaQWidgetDockableMixin, QMainWindow):
         self.init_menu()
         self.init_list()
 
-
     def test_debug(self):
         pip_util.freeze()
+
+    def show(self):
+        restore_script = textwrap.dedent(inspect.getsource(restore))
+        super().show(dockable=True, retain=False, uiScript=restore_script)
 
 # TODO:
 # window closeのコールバックで

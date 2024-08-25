@@ -37,7 +37,7 @@ path_ = rf'C:\{clearknot_temp}'
 
 
 @ClearKnotError.catch
-def add(string_list_model :QStringListModel):
+def add(string_list_model :QStringListModel) -> None:
     input_text, success = QInputDialog.getText(
         None,
         'Input Dialog',
@@ -51,6 +51,10 @@ def add(string_list_model :QStringListModel):
     installed = pip_util.freeze()
     if input_text in installed:
         raise ClearKnotError('すでにインストールされています')
+
+    # Githubのリポジトリの場合
+    if 'github' in input_text:
+        input_text = f'git+{input_text}'
 
     install_cmd = [Const.mayapy_exe_path, m, pip, 'install', user, input_text]
     _, success = SubprocessWrapper.run(install_cmd)
@@ -67,9 +71,9 @@ def add(string_list_model :QStringListModel):
     # mayapy.exeのシンタックスハイライトが効かなくなるため、両者ともユーザスペースに入れている
     # 直接Explorerで操作せずにGUIで操作する前提なら、これでも良いと思う
 
-    # TODO: ユーザスペースにgitリポジトリを入れる処理を書く
-    # TODO: pipでgitでインストールできるらしい
-    # TODO: clearknot.pthの自動生成処理
+    # TODO: pipでgithubリポジトリを入れる機能
+    # TODO: clearknot.pthの自動生成処理&自動書き込み処理
+    # TODO: venvを使用できるオプションをつける
 
 @ClearKnotError.catch
 def remove(string_list_model :QStringListModel):
